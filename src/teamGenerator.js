@@ -21,3 +21,5 @@ const teamGenerator = () => {
     
     </html>`;
 }
+
+module.exports = { teamGenerator };

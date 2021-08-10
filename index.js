@@ -1,6 +1,6 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
-const teamGenerator = require('./src/teamGenerator');
+const { teamGenerator } = require('./src/teamGenerator');
 
 const questions = [{
         type: "input",
