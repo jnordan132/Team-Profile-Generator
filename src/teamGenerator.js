@@ -11,8 +11,11 @@ const teamGenerator = () => {
     </head>
     
     <body>
+        <header>
+            <h1>My Team</h1>
+        </header>
     
-        <script src="index.js"></script>
+        <script src="/index.js"></script>
         <script src="/lib/employee.js"></script>
         <script src="/lib/engineer.js"></script>
         <script src="/lib/intern.js"></script>
