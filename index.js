@@ -1,89 +1,120 @@
 // Node modules
 const fs = require('fs');
 const inquirer = require('inquirer');
-const Choice = require('inquirer/lib/objects/choice');
 
 // Team prfile modules
-const { teamGenerator } = require('./src/teamGenerator');
-const manager = require("./lib/manager");
-const engineer = require("./lib/engineer");
-const intern = require("./lib/intern");
+const { generateHTML } = require('./src/teamGenerator');
+const Manager = require("./lib/manager");
+const Engineer = require("./lib/engineer");
+const Intern = require("./lib/intern");
 
-// Questions array
-const questions = [{
-        type: "input",
-        name: "manName",
-        message: "Manager name?"
-    },
-    {
-        type: "input",
-        name: "manId",
-        message: "What is this managers employee ID?"
-    },
-    {
-        type: "input",
-        name: "manEmail",
-        message: "What is this managers email address"
-    },
-    {
-        type: "input",
-        name: "manOfficeNum",
-        message: "What is this managers office number?"
-    },
-    {
-        type: "list",
-        name: "engOrInt",
-        message: "Would you like to add an engineer, intern, or finish?",
-        choices: ["Engineer", "Intern", "Finish"]
-    },
-    {
-        type: "input",
-        name: "empName",
-        message: `${} name?`
-    },
-    {
-        type: "input",
-        name: "empId",
-        message: `What is this ${} employee ID?`
-    },
-    {
-        type: "input",
-        name: "empEmail",
-        message: `What is this ${} email address?`
-    },
-    {
-        type: "input",
-        name: "github",
-        message: "What is this engineers GitHub username?",
-        when(input) {
-            input.engOrInt === "Engineer"
-        }
-    },
-    {
-        type: "input",
-        name: "school",
-        message: "What school does this intern go to?",
-        when(choices) {
-            choices.engOrInt === "Intern"
-        }
-    }
-]
+const teamArray = [];
 
-// Write to file
-const writeFile = (fileName, data) => {
-    fs.writeFile(fileName, data, function(err) {
+const addManager = () => {
+    return inquirer.prompt([{
+                type: 'input',
+                name: 'name',
+                message: 'Manager name?'
+            },
+            {
+                type: 'input',
+                name: 'id',
+                message: "What is this manager's ID number?"
+            },
+            {
+                type: 'input',
+                name: 'email',
+                message: "What is this manager's email address?"
+            },
+            {
+                type: 'input',
+                name: 'officeNum',
+                message: "What is this manager's office number"
+            }
+        ])
+        .then(managerInput => {
+            const { name, id, email, officeNum } = managerInput;
+            const manager = new Manager(name, id, email, officeNum);
+            teamArray.push(manager);
+            console.log(manager);
+        })
+};
+
+const addEmployee = () => {
+    return inquirer.prompt([{
+                type: 'list',
+                name: 'role',
+                message: "What is this employee's role?",
+                choices: ['Engineer', 'Intern']
+            },
+            {
+                type: 'input',
+                name: 'name',
+                message: "Employee name?"
+            },
+            {
+                type: 'input',
+                name: 'id',
+                message: "What is this employee's ID number?"
+            },
+            {
+                type: 'input',
+                name: 'email',
+                message: "What is this employee's email address?"
+            },
+            {
+                type: 'input',
+                name: 'github',
+                message: "What is this employee's github username?",
+                when: (input) => input.role === "Engineer"
+            },
+            {
+                type: 'input',
+                name: 'school',
+                message: "What school does this intern attend?",
+                when: (input) => input.role === "Intern"
+            },
+            {
+                type: 'confirm',
+                name: 'confirmAddEmployee',
+                message: "Are there any other employee's you would like to add?",
+                default: false
+            }
+        ])
+        .then(employeeData => {
+            let { name, id, email, role, github, school, confirmAddEmployee } = employeeData;
+            let employee;
+            if (role === "Engineer") {
+                employee = new Engineer(name, id, email, github);
+                console.log(employee);
+
+            } else if (role === "Intern") {
+                employee = new Intern(name, id, email, school);
+                console.log(employee);
+            }
+            teamArray.push(employee);
+            if (confirmAddEmployee) {
+                return addEmployee(teamArray);
+            } else {
+                return teamArray;
+            }
+        })
+}
+
+const writeFile = data => {
+    fs.writeFile('./dist/index.html', data, err => {
         console.log(data),
             err ? console.log(err) : console.log("Team profile page successfully created!")
     })
 }
 
-// Initialize HTML
-const init = () => {
-    inquirer.prompt(questions)
-        .then(function(data) {
-            writeFile("./dist/index.html", teamGenerator(data));
-            console.log(data)
-        })
-}
-
-init();
+addManager()
+    .then(addEmployee).then(teamArray => {
+        return generateHTML(teamArray);
+    })
+    .then(pageHTML => {
+        return writeFile(pageHTML);
+    })
+    .catch(err => {
+        console.log(err);
+    });
