@@ -2,14 +2,16 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
 
-// Team prfile modules
-const { generateHTML } = require('./src/teamGenerator');
+// Function import for HTML creation
+const generateHTML = require('./src/teamGenerator');
+
+// Team profile modules
 const Manager = require("./lib/manager");
 const Engineer = require("./lib/engineer");
 const Intern = require("./lib/intern");
 
+// Questions prompted to user
 const teamArray = [];
-
 const addManager = () => {
     return inquirer.prompt([{
                 type: 'input',
@@ -40,6 +42,7 @@ const addManager = () => {
         })
 };
 
+// Engineer and Intern prompts
 const addEmployee = () => {
     return inquirer.prompt([{
                 type: 'list',
@@ -101,6 +104,7 @@ const addEmployee = () => {
         })
 }
 
+// Write to HTML
 const writeFile = data => {
     fs.writeFile('./dist/index.html', data, err => {
         console.log(data),
@@ -108,6 +112,7 @@ const writeFile = data => {
     })
 }
 
+// Add input to as needed
 addManager()
     .then(addEmployee).then(teamArray => {
         return generateHTML(teamArray);
