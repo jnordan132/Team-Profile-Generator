@@ -9,8 +9,12 @@ header {
     height: 15vh;
 }
 
-header h1 {
+header #navbar-text {
     padding-top: 3.5%;
     font-size: xx-large;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.col-4 {
+    box-shadow: 0px 23px 7px -20px rgba(0, 0, 0, 0.79);
 }
