@@ -1,4 +1,3 @@
-// using Employee constructor 
 const Employee = require('../lib/employee');
 
 // Creates employee object 
@@ -31,7 +30,7 @@ test('gets employee email', () => {
     expect(employee.getEmail()).toEqual(expect.stringContaining(employee.email.toString()));
 });
 
-// gets role from getRole()
+// Gets role from getRole()
 test('gets role of employee', () => {
     const employee = new Employee('Jacob', 1, 'jacob.nordan113322@gmail.com');
 
