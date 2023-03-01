@@ -1,6 +1,5 @@
 # Team-Profile-Generator
-[GitHub Repo](https://github.com/jnordan132/Team-Profile-Generator)\
-[Video Showing Use](https://drive.google.com/file/d/1Wojp0P1S1A9wpsjUe0loLdXFakdCkPjY/view)
+[GitHub Repo](https://github.com/jnordan132/Team-Profile-Generator)
 # Description
 This project is used for making an automatically created HTML file that holds professional teams information in cards, identifying the postion, id number, email, and office number as well as the school attended of interns, and the GitHub usernames of engineers. 
 # Table of Contents 
